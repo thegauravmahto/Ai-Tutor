@@ -1,0 +1,288 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* CSS Variables */
+:root {
+    --bg-color: #f0f2f5; /* Light grey background */
+    --container-bg: #ffffff;
+    --header-bg: #007bff; /* Primary blue */
+    --header-text: #ffffff;
+    --control-bg: #f8f9fa;
+    --text-color: #343a40;
+    --user-msg-bg: #dcf8c6; /* Light green like WhatsApp */
+    --ai-msg-bg: #ffffff; /* White AI messages */
+    --user-msg-text: #303030;
+    --ai-msg-text: #303030;
+    --status-idle-bg: #6c757d; /* Grey */
+    --status-listening-bg: #dc3545; /* Red */
+    --status-thinking-bg: #ffc107; /* Yellow */
+    --status-speaking-bg: #17a2b8; /* Teal */
+    --status-error-bg: #e45959; /* Brighter Red */
+    --border-color: #e9ecef;
+    --shadow-color: rgba(0, 0, 0, 0.08);
+    --primary-blue: #007bff;
+    --danger-red: #dc3545;
+    --warning-orange: #fd7e14;
+    --font-family: 'Inter', sans-serif;
+}
+
+/* Basic Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 15px;
+    overflow: hidden; /* Prevent body scrollbars if container fits */
+}
+
+/* Chat Container */
+.chat-container {
+    width: 100%;
+    max-width: 650px; /* Max width */
+    height: 85vh; /* Max height */
+    max-height: 700px;
+    background-color: var(--container-bg);
+    border-radius: 12px;
+    box-shadow: 0 5px 25px var(--shadow-color);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Prevent content spill */
+}
+
+/* Header */
+.chat-header {
+    background-color: var(--header-bg);
+    color: var(--header-text);
+    padding: 15px 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.chat-header h1 {
+    font-size: 1.4em;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.chat-header p {
+    font-size: 0.85em;
+    opacity: 0.9;
+    margin-bottom: 10px;
+}
+
+/* Status Indicator */
+#status-indicator {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+#status-indicator .status-icon {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+    background-color: currentColor; /* Uses the text color */
+    transition: background-color 0.3s ease;
+}
+
+.status-idle { background-color: var(--status-idle-bg); color: white; }
+.status-listening { background-color: var(--status-listening-bg); color: white; }
+.status-thinking { background-color: var(--status-thinking-bg); color: #333; }
+.status-speaking { background-color: var(--status-speaking-bg); color: white; }
+.status-error { background-color: var(--status-error-bg); color: white; }
+
+
+/* Chat Window (Messages Area) */
+.chat-window {
+    flex-grow: 1; /* Takes up available space */
+    padding: 15px 10px;
+    overflow-y: auto; /* Enable scrolling */
+    background-color: var(--bg-color); /* Match body background */
+    /* Use standard column flow */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Custom Scrollbar (Optional but nice) */
+.chat-window::-webkit-scrollbar {
+    width: 6px;
+}
+.chat-window::-webkit-scrollbar-track {
+    background: transparent;
+}
+.chat-window::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 3px;
+}
+
+#message-list {
+    display: flex; /* Keep flex here */
+    flex-direction: column; /* Explicitly column */
+    gap: 10px; /* Space between messages */
+    padding-bottom: 10px; /* Space at the bottom */
+    /* This pushes the content block down when there are few messages */
+    margin-top: auto;
+}
+
+/* Individual Messages */
+.message {
+    display: flex;
+    max-width: 80%; /* Limit message width */
+}
+
+.message-content {
+    padding: 10px 15px;
+    border-radius: 18px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    box-shadow: 0 1px 2px var(--shadow-color);
+    font-size: 0.95em;
+}
+
+.message.user {
+    margin-left: auto; /* Align user messages to right */
+    align-self: flex-end;
+}
+.message.user .message-content {
+    background-color: var(--user-msg-bg);
+    color: var(--user-msg-text);
+    border-bottom-right-radius: 5px; /* Tail effect */
+}
+
+.message.ai {
+    margin-right: auto; /* Align AI messages to left */
+    align-self: flex-start;
+}
+.message.ai .message-content {
+    background-color: var(--ai-msg-bg);
+    color: var(--ai-msg-text);
+    border: 1px solid var(--border-color);
+    border-bottom-left-radius: 5px; /* Tail effect */
+}
+
+.message.ai.welcome .message-content {
+    background-color: #e9ecef;
+    border: none;
+    box-shadow: none;
+    color: #6c757d;
+    font-style: italic;
+    text-align: center;
+    width: 100%;
+}
+/* Welcome message container should align left like other AI messages */
+.message.ai.welcome {
+     margin-right: auto;
+     align-self: flex-start;
+     max-width: 100%; /* Allow welcome to be wider if needed */
+}
+/* Center the text content within the welcome message */
+.message.ai.welcome .message-content {
+    text-align: center;
+}
+
+
+/* Chat Controls (Footer) */
+.chat-controls {
+    flex-shrink: 0; /* Prevent footer from shrinking */
+    padding: 10px 15px;
+    background-color: var(--control-bg);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Buttons */
+.btn {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn svg {
+    width: 24px;
+    height: 24px;
+    fill: #5f6368; /* Default grey icon */
+}
+
+.btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+.btn:disabled svg {
+     fill: #bdbdbd; /* Lighter grey for disabled icon */
+}
+
+
+.btn-clear {
+    width: 40px;
+    height: 40px;
+}
+.btn-clear:not(:disabled):hover { background-color: rgba(253, 126, 20, 0.1); } /* Orange tint */
+.btn-clear:not(:disabled):hover svg { fill: var(--warning-orange); }
+
+
+.btn-record {
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary-blue); /* Blue background for main action */
+    margin-left: auto; /* Push record button to the right */
+}
+.btn-record svg {
+    fill: white;
+}
+.btn-record:not(:disabled):hover { background-color: #0056b3; } /* Darker blue */
+.btn-record:not(:disabled):active { transform: scale(0.95); }
+
+
+/* Show/Hide Mic/Stop Icons based on state */
+.btn-record .icon-stop { display: none; }
+.btn-record .icon-mic { display: block; } /* Mic visible by default */
+.btn-record.is-listening .icon-mic { display: none; }
+.btn-record.is-listening .icon-stop { display: block; }
+.btn-record.is-listening { background-color: var(--danger-red); } /* Red when listening */
+.btn-record.is-listening:not(:disabled):hover { background-color: #a71d2a; } /* Darker red */
+
+
+/* Basic Responsiveness */
+@media (max-width: 600px) {
+    body { padding: 0; }
+    .chat-container {
+        height: 100vh; /* Full height on mobile */
+        max-height: none;
+        border-radius: 0;
+    }
+    .chat-header h1 { font-size: 1.2em; }
+    .chat-header p { font-size: 0.8em; }
+    #status-indicator { font-size: 0.75em; padding: 3px 10px; }
+
+    .message { max-width: 85%; }
+    .message-content { font-size: 0.9em; padding: 8px 12px; }
+}
